@@ -73,7 +73,7 @@ const deleteMovie = (req, res, next) => {
         return next(new WrongUserError('Невозможно удалить чужой фильм'));
       }
 
-      return Movie.findByIdAndRemove(req.params.id).then(() => {
+      return Movie.remove(req.params.id).then(() => {
         res.send(movie);
       });
     })

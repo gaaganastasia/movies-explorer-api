@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const SameEmailError = require('../errors/same-email-err');
 const User = require('../models/user');
 
 const register = (req, res, next) => {
@@ -22,9 +23,7 @@ const register = (req, res, next) => {
 
           .catch(next);
       }
-      return res
-        .status(409)
-        .send({ message: 'Пользователь с таким email уже существует' });
+      throw new SameEmailError('Пользователь с таким email уже существует');
     })
     .catch(next);
 };

@@ -9,13 +9,16 @@ const router = require('./routes/index.js');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/limiter');
+require('dotenv').config();
 
 const app = express();
 
 const { PORT = 3000 } = process.env;
 
 const startMongo = async () => {
-  await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+  await mongoose.connect(process.env.NODE_ENV === 'production'
+    ? process.env.BD_LINK
+    : 'mongodb://localhost:27017/bitfilmsdb', {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -24,6 +27,7 @@ const startMongo = async () => {
 };
 startMongo();
 
+app.use(requestLogger);
 app.use(limiter);
 
 app.use(helmet());
@@ -37,7 +41,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(requestLogger);
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');

@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
+const AuthError = require('../errors/auth-err');
 require('dotenv').config();
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res.status(401).send({ message: 'необходима авторизация' });
+    throw new AuthError('необходима авторизация');
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -20,7 +21,7 @@ module.exports = (req, res, next) => {
       { expiresIn: '7d' },
     );
   } catch (err) {
-    return res.status(401).send({ message: 'необходима авторизация' });
+    throw new AuthError('необходима авторизация');
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса

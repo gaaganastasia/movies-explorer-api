@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const { default: validator } = require('validator');
 const controller = require('../controllers/movies');
 
 router.get('/', controller.getMovies);
@@ -15,25 +16,25 @@ router.post(
       description: Joi.string().required().min(2),
       nameRU: Joi.string().required().min(2),
       nameEN: Joi.string().required().min(2),
-      movieId: Joi.string().required().min(2),
-      image: Joi.string()
-        .required()
-        .min(2)
-        .regex(
-          /^(https?:\/\/)(www\.)?[a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+\.[a-z]{2,6}([a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+)?(#?)$/i,
-        ),
-      trailer: Joi.string()
-        .required()
-        .min(2)
-        .regex(
-          /^(https?:\/\/)(www\.)?[a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+\.[a-z]{2,6}([a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+)?(#?)$/i,
-        ),
-      thumbnail: Joi.string()
-        .required()
-        .min(2)
-        .regex(
-          /^(https?:\/\/)(www\.)?[a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+\.[a-z]{2,6}([a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+)?(#?)$/i,
-        ),
+      movieId: Joi.number().required().min(2),
+      image: Joi.string().required().min(2).custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле image заполнено некорректно');
+      }),
+      trailer: Joi.string().required().min(2).custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле trailer заполнено некорректно');
+      }),
+      thumbnail: Joi.string().required().min(2).custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле thumbnail заполнено некорректно');
+      }),
     }),
   }),
   controller.postMovie,
