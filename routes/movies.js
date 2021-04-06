@@ -16,7 +16,7 @@ router.post(
       description: Joi.string().required().min(2),
       nameRU: Joi.string().required().min(2),
       nameEN: Joi.string().required().min(2),
-      movieId: Joi.number().required().min(2),
+      movieId: Joi.number().required(),
       image: Joi.string().required().min(2).custom((value, helpers) => {
         if (validator.isURL(value)) {
           return value;
