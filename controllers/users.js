@@ -13,7 +13,7 @@ const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
-        res.send(user);
+        res.send({ name: user.name, email: user.email, _id: user._id });
       } else {
         throw new NotFoundError('Пользователь не найден');
       }
