@@ -18,7 +18,7 @@ const { PORT = 3000 } = process.env;
 const startMongo = async () => {
   await mongoose.connect(process.env.NODE_ENV === 'production'
     ? process.env.BD_LINK
-    : 'mongodb://localhost:27017/bitfilmsdb', {
+    : 'mongodb+srv://gaaganastasia:Mbspchnu@ndthwm.ylfhy.mongodb.net/bitfilmsdb?retryWrites=true&w=majority', {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
