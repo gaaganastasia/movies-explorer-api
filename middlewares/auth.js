@@ -15,9 +15,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(
       token,
-      process.env.NODE_ENV === 'production'
-        ? process.env.JWT_SECRET
-        : 'dev-secret',
+      'dev-secret',
       { expiresIn: '7d' },
     );
   } catch (err) {
