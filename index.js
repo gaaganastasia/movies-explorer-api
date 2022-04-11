@@ -15,14 +15,15 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb+srv://gaaganastasia:Mbspchnu@ndthwm.ylfhy.mongodb.net/bitfilmsdb?retryWrites=true&w=majority', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-})
-  .then(() => console.log('mongo connected'))
-  .catch((err) => {console.log(err)});
+const startMongo = async () => {
+  await mongoose.connect('mongodb+srv://gaaganastasia:Mbspchnu@ndthwm.ylfhy.mongodb.net/bitfilmsdb?retryWrites=true&w=majority', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  });
+};
+startMongo();
 
 app.use(requestLogger);
 app.use(limiter);
